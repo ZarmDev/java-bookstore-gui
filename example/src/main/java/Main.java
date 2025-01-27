@@ -293,9 +293,14 @@ public class Main extends Application {
         }
     }
 
-    private void addBook(User user, Book newBook) {
+    private boolean addBook(User user, Book newBook) {
         Book[] bookArr = user.getBooks();
         Book[] newArr = new Book[5];
+        // Ensure that the book is a complete copy of the original book so decreasing
+        // the quantity of one doesn't change the other one
+        // Book bookCopy = new Book(newBook.getTitle(), newBook.getAuthor(),
+        // newBook.getYearPublished(), newBook.getIsbn(), newBook.getQuantity());
+
         int i = 0;
         while (bookArr[i] != null && i < 4) {
             // System.out.println(bookArr[i] + " " + i);
@@ -306,10 +311,12 @@ public class Main extends Application {
             newArr[i] = newBook;
         } else {
             System.out.println("Book array is full.");
-            // End early to avoid any problems with setting the wrong books
-            return;
+            // End early to avoid any problems with setting the wrong books (and also to
+            // tell other functions that it didn't succeed)
+            return false;
         }
         user.setBooks(newArr);
+        return true;
     }
 
     private ImString studentName = new ImString(20);
@@ -330,12 +337,34 @@ public class Main extends Application {
             // so all of them work
             ImGui.pushID(i);
             if (ImGui.button(message + user.getName(), mediumButtonSizeLong)) {
-                if (book.getQuantity() == 1) {
-                    store.removeBook(book);
-                } else {
-                    book.setQuantity(book.getQuantity() - 1);
+                boolean check = false;
+                // First attempt to upgrade the quantity of the book if it already exists in the
+                // user
+                for (Book b : user.getBooks()) {
+                    if (book.equals(b)) {
+                        check = true;
+                        b.setQuantity(b.getQuantity() + 1);
+                    }
                 }
-                addBook(user, book);
+                if (check == false) {
+                    // Ensure that the book is a complete copy of the original book so decreasing
+                    // the quantity of one doesn't change the other one
+                    Book bookCopy = new Book(book.getTitle(), book.getAuthor(), book.getYearPublished(), book.getIsbn(),
+                            1);
+                    if (addBook(user, bookCopy) != false) {
+                        if (book.getQuantity() == 1) {
+                            store.removeBook(book);
+                        } else {
+                            book.setQuantity(book.getQuantity() - 1);
+                        }
+                    }
+                } else {
+                    if (book.getQuantity() == 1) {
+                        store.removeBook(book);
+                    } else {
+                        book.setQuantity(book.getQuantity() - 1);
+                    }
+                }
             }
             ImGui.popID();
         }
@@ -368,8 +397,10 @@ public class Main extends Application {
                 if (check == false) {
                     // Then add the book to the library
                     store.addBook(book);
-                    user.removeBook(book);
                 }
+                // Regardless if it's in the library or not in the library, we should remove the
+                // book from the user
+                user.removeBook(book);
             }
             ImGui.popID();
         }

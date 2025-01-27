@@ -50,9 +50,13 @@ public class User{
                     if (books[i].getQuantity() > 1) {
                         // Then, decrease the quantity by 1
                         books[i].setQuantity(books[i].getQuantity() - 1);
+                        // Make sure to return to ensure that if there is another of the same book you don't remove the other one
+                        return;
                     } else {
                         // This means there is only one book, so remove it completely
                         books[i] = null;
+                        // Make sure to return to ensure that if there is another of the same book you don't remove the other one
+                        return;
                     }
                 }
             }

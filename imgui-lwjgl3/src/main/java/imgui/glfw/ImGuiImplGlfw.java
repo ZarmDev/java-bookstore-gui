@@ -246,6 +246,12 @@ import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.system.MemoryUtil.NULL;
+// TO USE FOR ICON
+// import org.lwjgl.stb.STBImage;
+// import static org.lwjgl.glfw.GLFW.glfwSetWindowIcon;
+// import org.lwjgl.glfw.GLFWImage;
+// import java.nio.IntBuffer;
+// import org.lwjgl.BufferUtils;
 
 /**
  * This class is a straightforward port of the
@@ -828,6 +834,26 @@ public class ImGuiImplGlfw {
         data.window = window;
         data.time = 0.0;
         data.wantUpdateMonitors = true;
+
+        // ## LOTS OF AI USED HERE TO HELP ME ##
+        // // Load the icon image
+        // IntBuffer width = BufferUtils.createIntBuffer(1);
+        // IntBuffer height = BufferUtils.createIntBuffer(1);
+        // IntBuffer channels = BufferUtils.createIntBuffer(1);
+        // ByteBuffer iconData = STBImage.stbi_load("./library.png", width, height, channels, 4);
+        // if (iconData == null) {
+        //     throw new RuntimeException("Failed to load icon image");
+        // }
+
+        // // Create GLFWImage
+        // GLFWImage.Buffer iconImages = GLFWImage.malloc(1);
+        // iconImages.position(0).width(width.get(0)).height(height.get(0)).pixels(iconData);
+
+        // // Set the window icon
+        // glfwSetWindowIcon(window, iconImages);
+
+        // // Free the icon image
+        // STBImage.stbi_image_free(iconData);
 
         io.setGetClipboardTextFn(getClipboardTextFn());
         io.setSetClipboardTextFn(setClipboardTextFn());

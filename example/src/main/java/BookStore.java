@@ -74,6 +74,36 @@ public class BookStore {
         users = newUsers;
     }
 
+    // method to move non-null items to the front and null items to the back
+    public void consolidateBooks() {
+        Book[] newBooks = new Book[books.length];
+        int newBookIndex = 0;
+
+        // For testing
+        // for (int i = 0; i < newUsers.length; i++) {
+        //     System.out.println(newUsers[i]);
+        // }
+        // System.out.println("----------");
+
+        for (int i = 0; i < books.length; i++) {
+            // If the book is not null then add it to the end of newBook (using newBookIndex) and increment newBookIndex. This ensures that the new array only has non-null values
+            // Ignore all null values
+            if (books[i] != null) {
+                newBooks[newBookIndex] = books[i];
+                newBookIndex++;
+            }
+        }
+        // For testing
+        // System.out.println("----------");
+        // for (int i = 0; i < newUsers.length; i++) {
+        //     System.out.println(newUsers[i]);
+        // }
+        // System.out.println("----------");
+
+        // Ensure that the users variable is updated with newUsers
+        books = newBooks;
+    }
+
     // Modify the null value at bookIndex (which is at the end of the Book[] array) in order to add a book to the end
     // There is no check for if bookIndex is greater than the end of the array
     public void addBook(Book book) {
@@ -133,7 +163,7 @@ public class BookStore {
             }
         }
         // Make a new array but without the null values (book length is amount of nulls found)
-        Book[] newBooks = new Book[books.length];
+        Book[] newBooks = new Book[books.length - nullAmount];
         int newBookIndex = 0;
         for (int i = 0; i < books.length; i++) {
             // Ensure books[i] is not null before checking if a method exists on it
